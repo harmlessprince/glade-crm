@@ -2,7 +2,9 @@
 
 namespace App\Constants;
 
-class RoleType
+use App\Enums\BaseEnum;
+
+class RoleType extends BaseEnum
 {
     const SUPER_ADMIN = 1;
     const ADMIN = 2;

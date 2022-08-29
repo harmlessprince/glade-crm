@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use App\Constants\RoleType;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class User extends Authenticatable
 {
@@ -21,6 +23,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'role'
     ];
 
     /**
@@ -41,4 +44,49 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function getRoleName(int $role)
+    {
+        switch ($role) {
+            case RoleType::SUPER_ADMIN:
+                return 'super admin';
+                break;
+            case RoleType::ADMIN:
+                return 'admin';
+                break;
+            case RoleType::COMPANY:
+                return 'company';
+                break;
+            default:
+                return 'employee';
+                break;
+        }
+    }
+
+    public function isSuperAdmin()
+    {
+        return $this->role = RoleType::SUPER_ADMIN;
+    }
+    public function isAdmin()
+    {
+        return $this->role = RoleType::ADMIN;
+    }
+    public function isCompany()
+    {
+        return $this->role = RoleType::COMPANY;
+    }
+    public function isEmployee()
+    {
+        return $this->role = RoleType::EMPLOYEE;
+    }
+
+    public function company()
+    {
+        return $this->hasOne(Company::class, 'login_id');
+    }
+
+    public function employee()
+    {
+        return $this->hasOne(Employee::class, 'login_id');
+    }
 }
