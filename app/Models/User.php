@@ -74,6 +74,7 @@ class User extends Authenticatable
     public function isCompany()
     {
         return $this->role = RoleType::COMPANY;
+
     }
     public function isEmployee()
     {
@@ -82,11 +83,11 @@ class User extends Authenticatable
 
     public function company()
     {
-        return $this->hasOne(Company::class, 'login_id');
+        return $this->hasOne(Company::class);
     }
 
     public function employee()
     {
-        return $this->hasOne(Employee::class, 'login_id');
+        return $this->hasOne(Employee::class);
     }
 }

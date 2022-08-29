@@ -2,7 +2,7 @@
 
 namespace App\Constants;
 
-use App\Enums\BaseEnum;
+
 
 class RoleType extends BaseEnum
 {

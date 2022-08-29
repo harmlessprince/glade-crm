@@ -14,7 +14,10 @@ class EmployeeFactory extends Factory
     public function definition()
     {
         return [
-            //
+            'first_name' => $this->faker->firstName(),
+            'last_name' => $this->faker->lastName(),
+            'email' => $this->faker->safeEmail(),
+            'phone' => $this->faker->phoneNumber(),
         ];
     }
 }
