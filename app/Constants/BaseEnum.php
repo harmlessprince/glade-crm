@@ -13,7 +13,7 @@ abstract class BaseEnum
     const NONE = null;
 
     /**
-     * @throws NotSupportedException
+     * @throws Error
      */
     final  private function __construct()
     {
@@ -21,7 +21,7 @@ abstract class BaseEnum
     }
 
     /**
-     * @throws NotSupportedException
+     * @throws Error
      */
     final private function __clone()
     {
@@ -30,7 +30,7 @@ abstract class BaseEnum
 
     final public static function toArray(): array
     {
-        return (new ReflectionClass(static::class))->getConstants(ReflectionClassConstant::IS_PUBLIC);
+        return (new ReflectionClass(static::class))->getConstants();
     }
 
     final public static function isValid(string $value): bool

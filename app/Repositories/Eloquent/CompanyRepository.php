@@ -2,7 +2,9 @@
 
 namespace App\Repositories\Eloquent;
 
-class CompanyRepository extends EloquentBaseRepository
+use App\Repositories\Contracts\CompanyRepositoryInterface;
+
+class CompanyRepository extends EloquentBaseRepository implements CompanyRepositoryInterface
 {
 
 }

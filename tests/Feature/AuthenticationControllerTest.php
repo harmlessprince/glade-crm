@@ -16,7 +16,6 @@ class AuthenticationControllerTest extends TestCase
 
     /**
      * A basic feature test example.
-     * @watch
      * @return void
      */
     public function test_user_can_not_login_with_invalid_credentials()
@@ -32,7 +31,6 @@ class AuthenticationControllerTest extends TestCase
 
     /**
      *
-     * @watch
      * @return void
      */
     public function test_user_can_login_with_valid_credentials()
@@ -48,7 +46,6 @@ class AuthenticationControllerTest extends TestCase
 
     /**
      *
-     * @watch
      * @return void
      */
     public function test_user_can_logout_by_supplying_token()
@@ -61,7 +58,6 @@ class AuthenticationControllerTest extends TestCase
 
     /**
      * An unauthenticated user can not access protected routes
-     * @watch
      * @return void
      */
     public function test_unauthenticated_user_cannot_access_protected_routes()
@@ -70,7 +66,7 @@ class AuthenticationControllerTest extends TestCase
 
         $this->expectException('Illuminate\Auth\AuthenticationException');
 
-        $this->postJson('/api/auth/logout'); //This route is protected with auth:api
+        $this->postJson('/api/auth/logout'); //This route is protected with auth:sanctum middleware
     }
 
     private function getUser()
