@@ -2,7 +2,7 @@
 
 namespace App\Providers;
 
-use App\Repositories\Contracts\CompanyRespositoryInterface;
+use App\Repositories\Contracts\CompanyRepositoryInterface;
 use App\Repositories\Contracts\EloquentRepositoryInterface;
 use App\Repositories\Contracts\EmployeeRepositoryInterface;
 use App\Repositories\Contracts\UserRepositoryInterface;
@@ -23,7 +23,7 @@ class RepositoryServiceProvider extends ServiceProvider
     {
         $this->app->bind(EloquentRepositoryInterface::class, EloquentBaseRepository::class);
         $this->app->bind(UserRepositoryInterface::class, UserRepository::class);
-        $this->app->bind(CompanyRespositoryInterface::class, CompanyRepository::class);
+        $this->app->bind(CompanyRepositoryInterface::class, CompanyRepository::class);
         $this->app->bind(EmployeeRepositoryInterface::class, EmployeeRepository::class);
     }
 
