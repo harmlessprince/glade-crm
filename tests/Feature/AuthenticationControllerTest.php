@@ -13,6 +13,7 @@ use Tests\TestCase;
 class AuthenticationControllerTest extends TestCase
 {
     use  RefreshDatabase, WithFaker, DatabaseMigrations;
+
     /**
      * A basic feature test example.
      * @watch
@@ -21,7 +22,7 @@ class AuthenticationControllerTest extends TestCase
     public function test_user_can_not_login_with_invalid_credentials()
     {
         $user = $this->getUser();
-        $response  = $this->postJson('api/auth/login', [
+        $response = $this->postJson('api/auth/login', [
             'email' => $user->email,
             'password' => 'password1',
         ]);
@@ -37,7 +38,7 @@ class AuthenticationControllerTest extends TestCase
     public function test_user_can_login_with_valid_credentials()
     {
         $user = $this->getUser();
-        $response  = $this->postJson('api/auth/login', [
+        $response = $this->postJson('api/auth/login', [
             'email' => $user->email,
             'password' => 'password',
         ]);
@@ -54,11 +55,26 @@ class AuthenticationControllerTest extends TestCase
     {
         $user = $this->getUser();
         Sanctum::actingAs($user);
-        $response  = $this->postJson('api/auth/logout');
+        $response = $this->postJson('api/auth/logout');
         $response->assertStatus(200);
     }
 
-    private function  getUser(){
+    /**
+     * An unauthenticated user can not access protected routes
+     * @watch
+     * @return void
+     */
+    public function test_unauthenticated_user_cannot_access_protected_routes()
+    {
+        $this->withoutExceptionHandling();
+
+        $this->expectException('Illuminate\Auth\AuthenticationException');
+
+        $this->postJson('/api/auth/logout'); //This route is protected with auth:api
+    }
+
+    private function getUser()
+    {
         return User::factory()->create(['role' => RoleType::SUPER_ADMIN]);
     }
 }
