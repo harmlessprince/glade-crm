@@ -65,20 +65,20 @@ class User extends Authenticatable
 
     public function isSuperAdmin()
     {
-        return $this->role = RoleType::SUPER_ADMIN;
+        return $this->role == RoleType::SUPER_ADMIN;
     }
     public function isAdmin()
     {
-        return $this->role = RoleType::ADMIN;
+        return $this->role == RoleType::ADMIN;
     }
     public function isCompany()
     {
-        return $this->role = RoleType::COMPANY;
+        return $this->role == RoleType::COMPANY;
 
     }
     public function isEmployee()
     {
-        return $this->role = RoleType::EMPLOYEE;
+        return $this->role == RoleType::EMPLOYEE;
     }
 
     public function company()
