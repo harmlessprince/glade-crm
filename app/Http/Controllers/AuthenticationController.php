@@ -27,4 +27,13 @@ class AuthenticationController extends Controller
             return $this->respondInternalError($exception->getMessage());
         }
     }
+    /**
+     * THis logs the user out of the application
+     */
+
+    public function logout(Request $request): JsonResponse
+    {
+        $request->user()->tokens()->delete();
+        return $this->respondSuccess([], 'logged out successfully');
+    }
 }

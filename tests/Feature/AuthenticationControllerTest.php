@@ -7,6 +7,7 @@ use App\Models\User;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Laravel\Sanctum\Sanctum;
 use Tests\TestCase;
 
 class AuthenticationControllerTest extends TestCase
@@ -42,6 +43,19 @@ class AuthenticationControllerTest extends TestCase
         ]);
         $response->assertStatus(200);
         $this->assertTrue(auth('sanctum')->check());
+    }
+
+    /**
+     *
+     * @watch
+     * @return void
+     */
+    public function test_user_can_logout_by_supplying_token()
+    {
+        $user = $this->getUser();
+        Sanctum::actingAs($user);
+        $response  = $this->postJson('api/auth/logout');
+        $response->assertStatus(200);
     }
 
     private function  getUser(){
