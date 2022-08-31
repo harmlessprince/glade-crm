@@ -63,7 +63,7 @@ class SetupDevEnvironmentCommand extends Command
         $this->info('Creating Super Admin');
         $user = User::updateOrCreate([
             'name' => 'Super Admin',
-            'email' => 'superadmin@admin.com ',
+            'email' => 'superadmin@admin.com',
             'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
             'role' => RoleType::SUPER_ADMIN,
         ]);

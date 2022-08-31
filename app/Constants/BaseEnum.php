@@ -10,7 +10,7 @@ use ReflectionClassConstant;
 
 abstract class BaseEnum
 {
-    const NONE = null;
+//    const NONE = null;
 
     /**
      * @throws Error

@@ -25,11 +25,13 @@ class StoreUserRequest extends FormRequest
      */
     public function rules(): array
     {
+        $roles = RoleType::toArray();
+        unset($roles['SUPER_ADMIN']);
         return [
             'name' => ['nullable', 'string', 'max:200'],
             'email' => ['required', 'email', 'unique:users,email'],
             'password' => ['required', 'min:4'],
-            'role' => ['required', 'integer', Rule::in(RoleType::toArray())]
+            'role' => ['sometimes', 'integer', Rule::in($roles)]
         ];
     }
 }
