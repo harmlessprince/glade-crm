@@ -50,7 +50,7 @@ class UserTest extends TestCase
      */
     public function test_user_with_role_admin_can_not_create_user_account()
     {
-        $user = $this->createUser(RoleType::EMPLOYEE);
+        $user = $this->createUser(RoleType::ADMIN);
         Sanctum::actingAs($user);
         $response = $this->postJson('api/users', $this->data());
         $this->assertDatabaseCount('users', 1);

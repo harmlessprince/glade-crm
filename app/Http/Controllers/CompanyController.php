@@ -4,18 +4,30 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreCompanyRequest;
 use App\Http\Requests\UpdateCompanyRequest;
+use App\Http\Resources\CompanyResourceCollection;
 use App\Models\Company;
+use App\Repositories\Contracts\CompanyRepositoryInterface;
+use Illuminate\Http\JsonResponse;
 
 class CompanyController extends Controller
 {
+    private CompanyRepositoryInterface $companyRepository;
+
+    public function __construct(CompanyRepositoryInterface $companyRepository)
+    {
+        $this->companyRepository = $companyRepository;
+    }
+
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return JsonResponse
      */
-    public function index()
+    public function index(): JsonResponse
     {
-        //
+        $this->authorize('viewAny', Company::class);
+        $companies = $this->companyRepository->all(['*']);
+        return  $this->respondWithResourceCollection(new CompanyResourceCollection($companies), 'All Companies fetched successfully');
     }
 
     /**

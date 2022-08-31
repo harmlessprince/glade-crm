@@ -18,7 +18,7 @@ class UserController extends Controller
     /**
      * @var UserRepositoryInterface
      */
-    private $userRepository;
+    private UserRepositoryInterface $userRepository;
 
     public function __construct(UserRepositoryInterface $repository)
     {
