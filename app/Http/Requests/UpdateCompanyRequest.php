@@ -3,6 +3,8 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
+
 
 class UpdateCompanyRequest extends FormRequest
 {
@@ -13,7 +15,7 @@ class UpdateCompanyRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,7 +26,10 @@ class UpdateCompanyRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'user_id' => ['sometimes', 'integer', 'exists:users,id'],
+            'name' => ['sometimes', 'string', 'max:200'],
+            'email' => ['sometimes', 'email', Rule::unique('companies')->ignore($this->company)],
+            'website' => ['sometimes', 'url',  Rule::unique('companies')->ignore($this->company)],
         ];
     }
 }
