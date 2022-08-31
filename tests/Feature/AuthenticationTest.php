@@ -10,7 +10,7 @@ use Illuminate\Foundation\Testing\WithFaker;
 use Laravel\Sanctum\Sanctum;
 use Tests\TestCase;
 
-class AuthenticationControllerTest extends TestCase
+class AuthenticationTest extends TestCase
 {
     use  RefreshDatabase, WithFaker, DatabaseMigrations;
 
