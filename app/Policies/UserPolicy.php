@@ -54,7 +54,7 @@ class UserPolicy
      */
     public function update(User $user, User $model)
     {
-        //
+        return $user->role == RoleType::SUPER_ADMIN;
     }
 
     /**
@@ -66,7 +66,7 @@ class UserPolicy
      */
     public function delete(User $user, User $model)
     {
-        //
+        return  $user->role == RoleType::SUPER_ADMIN;
     }
 
     /**
