@@ -83,7 +83,7 @@ These instructions will get you a copy of the project up and running on your loc
     ```
     php artisan app:setup --seed=y
     ```
-  - Setup Mail with either Mailtrap or mailhog
+  - Setup Mail with either mailtrap or mailhog
   
     ```
     MAIL_MAILER=smtp
