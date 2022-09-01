@@ -6,11 +6,13 @@ use App\Constants\RoleType;
 use App\Models\Company;
 use App\Models\Employee;
 use App\Models\User;
+use App\Notifications\CompanyCreatedNotification;
 use App\Repositories\Contracts\CompanyRepositoryInterface;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Support\Facades\Notification;
 use Laravel\Sanctum\Sanctum;
 use Tests\TestCase;
 
@@ -102,7 +104,19 @@ class CompanyTest extends TestCase
         ]);
         $response->assertStatus(200);
     }
-
+    /**
+     * @return void
+     */
+    public function test_notification_is_sent_to_company_owner_account_once_company_is_created()
+    {
+        Notification::fake();
+        $authUser = $this->createUser(RoleType::ADMIN);
+        $user = $this->createUser(RoleType::COMPANY);
+        Sanctum::actingAs($authUser);
+        $response = $this->postJson(route('companies.store'), $this->companyData($user->id));
+        Notification::assertSentTo($user, CompanyCreatedNotification::class);
+        $response->assertStatus(200);
+    }
 
     /**
      * @return void

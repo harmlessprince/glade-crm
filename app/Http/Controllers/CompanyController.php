@@ -8,6 +8,7 @@ use App\Http\Requests\UpdateCompanyRequest;
 use App\Http\Resources\CompanyResource;
 use App\Http\Resources\CompanyResourceCollection;
 use App\Models\Company;
+use App\Notifications\CompanyCreatedNotification;
 use App\Repositories\Contracts\CompanyRepositoryInterface;
 use App\Repositories\Contracts\UserRepositoryInterface;
 use Illuminate\Auth\Access\AuthorizationException;
@@ -56,6 +57,7 @@ class CompanyController extends Controller
           return  $this->respondError('Only users with role of company can have a company');
         }
         $company = $this->companyRepository->create($request->validated());
+        $user->notify(new CompanyCreatedNotification($company));
         return $this->respondWithResource(new CompanyResource($company), 'Company created successfully');
     }
 
