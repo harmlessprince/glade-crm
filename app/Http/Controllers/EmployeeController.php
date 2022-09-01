@@ -77,29 +77,35 @@ class EmployeeController extends Controller
     public function show(Employee $employee): JsonResponse
     {
         $this->authorize('view', $employee);
-       return $this->respondWithResource(new EmployeeResource($employee->load('company')));
+        return $this->respondWithResource(new EmployeeResource($employee->load('company')));
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param \App\Http\Requests\UpdateEmployeeRequest $request
+     * @param UpdateEmployeeRequest $request
      * @param Employee $employee
-     * @return Response
+     * @return JsonResponse
+     * @throws AuthorizationException
      */
-    public function update(UpdateEmployeeRequest $request, Employee $employee)
+    public function update(UpdateEmployeeRequest $request, Employee $employee): JsonResponse
     {
-          $this->authorize('delete', $employee);
+        $this->authorize('update', $employee);
+        $this->employeeRepository->update($employee->id, $request->validated());
+        return $this->respondWithResource(new EmployeeResource($employee->refresh()->load('company')), 'Employee profile updated');
     }
 
     /**
      * Remove the specified resource from storage.
      *
      * @param Employee $employee
-     * @return Response
+     * @return JsonResponse
+     * @throws AuthorizationException
      */
-    public function destroy(Employee $employee)
+    public function destroy(Employee $employee): JsonResponse
     {
         $this->authorize('delete', $employee);
+        $employee->delete();
+        return $this->respondSuccess([],'Employee deleted successfully');
     }
 }

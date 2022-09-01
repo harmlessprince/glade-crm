@@ -32,8 +32,6 @@ class UserController extends Controller
     {
         $this->authorize('create', User::class);
         $data = $request->validated();
-        //reset role to admin
-        $data['role'] = RoleType::ADMIN;
         $data['password'] = Hash::make($data['password']);
         $user = $this->userRepository->create($data);
         return $this->respondWithResource(new UserResource($user), 'User created successfully');

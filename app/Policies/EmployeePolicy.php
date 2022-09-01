@@ -61,7 +61,7 @@ class EmployeePolicy
      */
     public function update(User $user, Employee $employee)
     {
-        //
+        return $user->role == RoleType::SUPER_ADMIN;
     }
 
     /**
@@ -73,7 +73,7 @@ class EmployeePolicy
      */
     public function delete(User $user, Employee $employee)
     {
-        //
+        return $user->role == RoleType::SUPER_ADMIN;
     }
 
     /**

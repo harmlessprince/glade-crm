@@ -129,6 +129,65 @@ class EmployeeTest extends TestCase
         $response->assertStatus(200);
     }
 
+    /**
+     * @return void
+     */
+    public function test_company_can_not_view_an_employee_profile_that_does_not_belongs_to_the_company()
+    {
+        $authUser = $this->createUser(RoleType::COMPANY);
+        Sanctum::actingAs($authUser);
+        $company = Company::factory()->create(['user_id' => $this->createUser(RoleType::COMPANY)->id]);
+        $employee = Employee::factory()->create(['user_id' => $authUser->id, 'company_id' => $company->id]);
+        $response = $this->get(route('employees.show', ['employee' => $employee]));
+        $response->assertStatus(403);
+    }
+    public function test_a_super_admin_can_update_employee_profile()
+    {
+        $authUser = $this->createUser(RoleType::SUPER_ADMIN);
+        Sanctum::actingAs($authUser);
+        $companyOwner = $this->createUser(RoleType::COMPANY);
+        $company = Company::factory()->create(['user_id' => $companyOwner->id]);
+        $employeeUser = $this->createUser(RoleType::EMPLOYEE);
+        $employee = Employee::factory()->create(['user_id' => $employeeUser->id, 'company_id' => $company->id]);
+        $response = $this->patchJson(route('employees.update', $employee->id), ['first_name' => 'First central']);
+        $response->assertStatus(200);
+    }
+    public function test_admin_can_not_update_a_company_profile()
+    {
+        $authUser = $this->createUser(RoleType::ADMIN);
+        Sanctum::actingAs($authUser);
+        $companyOwner = $this->createUser(RoleType::COMPANY);
+        $company = Company::factory()->create(['user_id' => $companyOwner->id]);
+        $employeeUser = $this->createUser(RoleType::EMPLOYEE);
+        $employee = Employee::factory()->create(['user_id' => $employeeUser->id, 'company_id' => $company->id]);
+        $response = $this->patchJson(route('employees.update', $employee->id), ['first_name' => 'First central']);
+        $response->assertStatus(403);
+    }
+
+    public function test_a_super_admin_can_delete_company_profile()
+    {
+        $authUser = $this->createUser(RoleType::SUPER_ADMIN);
+        Sanctum::actingAs($authUser);
+        $companyOwner = $this->createUser(RoleType::COMPANY);
+        $company = Company::factory()->create(['user_id' => $companyOwner->id]);
+        $employeeUser = $this->createUser(RoleType::EMPLOYEE);
+        $employee = Employee::factory()->create(['user_id' => $employeeUser->id, 'company_id' => $company->id]);
+        $response = $this->delete(route('employees.destroy', $employee->id));
+        $this->assertDatabaseCount('employees', 0);
+        $response->assertStatus(200);
+    }
+    public function test_admin_can_not_delete_a_company_profile()
+    {
+        $authUser = $this->createUser(RoleType::ADMIN);
+        Sanctum::actingAs($authUser);
+        $companyOwner = $this->createUser(RoleType::COMPANY);
+        $company = Company::factory()->create(['user_id' => $companyOwner->id]);
+        $employeeUser = $this->createUser(RoleType::EMPLOYEE);
+        $employee = Employee::factory()->create(['user_id' => $employeeUser->id, 'company_id' => $company->id]);
+        $response = $this->delete(route('employees.destroy', $employee->id));
+        $this->assertDatabaseCount('employees', 1);
+        $response->assertStatus(403);
+    }
 
 
     private function createUser($role)
