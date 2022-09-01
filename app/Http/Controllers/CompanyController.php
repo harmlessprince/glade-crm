@@ -78,6 +78,7 @@ class CompanyController extends Controller
      * @param UpdateCompanyRequest $request
      * @param Company $company
      * @return JsonResponse
+     * @throws AuthorizationException
      */
     public function update(UpdateCompanyRequest $request, Company $company): JsonResponse
     {

@@ -2,6 +2,7 @@
 
 namespace App\Policies;
 
+use App\Constants\RoleType;
 use App\Models\Employee;
 use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
@@ -41,7 +42,7 @@ class EmployeePolicy
      */
     public function create(User $user)
     {
-        //
+        return $user->role == RoleType::SUPER_ADMIN || $user->role == RoleType::ADMIN;
     }
 
     /**
