@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Constants\RoleType;
 use App\Http\Requests\StoreEmployeeRequest;
 use App\Http\Requests\UpdateEmployeeRequest;
+use App\Http\Resources\EmployeeResource;
 use App\Http\Resources\EmployeeResourceCollection;
 use App\Http\Resources\EmptyResource;
 use App\Models\Company;
@@ -14,6 +15,7 @@ use App\Repositories\Contracts\UserRepositoryInterface;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Response;
 
 class EmployeeController extends Controller
 {
@@ -58,7 +60,7 @@ class EmployeeController extends Controller
                 return $this->respondError('The supplied user does not have a role of type employee');
             }
             if ($user->employee()->exists()) {
-                return $this->respondError('The supplied user already has a company and employee');
+                return $this->respondError('The supplied user already has a company and employee profile');
             }
         }
         $employee = $this->employeeRepository->create($request->validated());
@@ -68,45 +70,36 @@ class EmployeeController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param \App\Models\Employee $employee
-     * @return \Illuminate\Http\Response
+     * @param Employee $employee
+     * @return JsonResponse
+     * @throws AuthorizationException
      */
-    public function show(Employee $employee)
+    public function show(Employee $employee): JsonResponse
     {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param \App\Models\Employee $employee
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Employee $employee)
-    {
-        //
+        $this->authorize('view', $employee);
+       return $this->respondWithResource(new EmployeeResource($employee->load('company')));
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param \App\Http\Requests\UpdateEmployeeRequest $request
-     * @param \App\Models\Employee $employee
-     * @return \Illuminate\Http\Response
+     * @param Employee $employee
+     * @return Response
      */
     public function update(UpdateEmployeeRequest $request, Employee $employee)
     {
-        //
+          $this->authorize('delete', $employee);
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param \App\Models\Employee $employee
-     * @return \Illuminate\Http\Response
+     * @param Employee $employee
+     * @return Response
      */
     public function destroy(Employee $employee)
     {
-        //
+        $this->authorize('delete', $employee);
     }
 }

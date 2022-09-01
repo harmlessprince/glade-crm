@@ -37,8 +37,7 @@ class EmployeePolicy
     {
         return $user->role == RoleType::SUPER_ADMIN
             || $user->role == RoleType::ADMIN
-            || ($user->employee && $user->employee->company_id == $company->id)
-            || ($user->company && $user->company->id == $company->id);
+            || ($user->role == RoleType::EMPLOYEE && ($user->employee && $user->employee->id == $employee->id));
     }
 
     /**

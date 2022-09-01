@@ -102,7 +102,34 @@ class EmployeeTest extends TestCase
         $response->assertStatus(200);
     }
 
-    
+    /**
+     * @return void
+     */
+    public function test_employee_can_view_is_employee_profile()
+    {
+        $authUser = $this->createUser(RoleType::EMPLOYEE);
+        Sanctum::actingAs($authUser);
+        $companyOwner = $this->createUser(RoleType::COMPANY);
+        $company = Company::factory()->create(['user_id' => $companyOwner->id]);
+        $employee = Employee::factory()->create(['user_id' => $authUser->id, 'company_id' => $company->id]);
+        $response = $this->get(route('employees.show', ['employee' => $employee]));
+        $response->assertStatus(200);
+    }
+
+    /**
+     * @return void
+     */
+    public function test_company_can_view_an_employee_profile_that_belongs_to_the_company()
+    {
+        $authUser = $this->createUser(RoleType::COMPANY);
+        Sanctum::actingAs($authUser);
+        $company = Company::factory()->create(['user_id' => $authUser->id]);
+        $employee = Employee::factory()->create(['user_id' => $authUser->id, 'company_id' => $company->id]);
+        $response = $this->get(route('employees.show', ['employee' => $employee]));
+        $response->assertStatus(200);
+    }
+
+
 
     private function createUser($role)
     {
