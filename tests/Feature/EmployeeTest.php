@@ -51,8 +51,58 @@ class EmployeeTest extends TestCase
         $response = $this->postJson(route('employees.store'), $this->employeeData($employeeUser->id, $company->id));
         $response->assertStatus(200);
         $this->assertDatabaseCount('employees', 1);
-
     }
+
+    /**
+     * @return void
+     */
+    public function test_super_admin_can_see_company_employees_by_supplying_company_id()
+    {
+        $authUser = $this->createUser(RoleType::SUPER_ADMIN);
+        Sanctum::actingAs($authUser);
+        $companyOwner = $this->createUser(RoleType::COMPANY);
+        $company = Company::factory()->create(['user_id' => $companyOwner->id]);
+        $response = $this->get(route('employees.index', ['company' => $company]));
+        $response->assertStatus(200);
+    }
+
+    /**
+     * @return void
+     */
+    public function test_admin_can_see_company_employees_by_supplying_company_id()
+    {
+        $authUser = $this->createUser(RoleType::ADMIN);
+        Sanctum::actingAs($authUser);
+        $companyOwner = $this->createUser(RoleType::COMPANY);
+        $company = Company::factory()->create(['user_id' => $companyOwner->id]);
+        $response = $this->get(route('employees.index', ['company' => $company]));
+        $response->assertStatus(200);
+    }
+    /**
+     * @return void
+     */
+    public function test_employee_can_not_see_company_employees()
+    {
+        $authUser = $this->createUser(RoleType::EMPLOYEE);
+        Sanctum::actingAs($authUser);
+        $companyOwner = $this->createUser(RoleType::COMPANY);
+        $company = Company::factory()->create(['user_id' => $companyOwner->id]);
+        $response = $this->get(route('employees.index', ['company' => $company]));
+        $response->assertStatus(403);
+    }
+    /**
+     * @return void
+     */
+    public function test_company_owner_can_see_all_employees_that_belongs_to_his_company()
+    {
+        $authUser = $this->createUser(RoleType::COMPANY);
+        Sanctum::actingAs($authUser);
+        $company = Company::factory()->create(['user_id' => $authUser->id]);
+        $response = $this->get(route('employees.index', ['company' => $company]));
+        $response->assertStatus(200);
+    }
+
+    
 
     private function createUser($role)
     {

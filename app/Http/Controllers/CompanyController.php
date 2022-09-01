@@ -33,7 +33,7 @@ class CompanyController extends Controller
     public function index(): JsonResponse
     {
         $this->authorize('viewAny', Company::class);
-        $companies = $this->companyRepository->all(['*']);
+        $companies = $this->companyRepository->getPaginated();
         return $this->respondWithResourceCollection(new CompanyResourceCollection($companies), 'All Companies fetched successfully');
     }
 

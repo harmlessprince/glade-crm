@@ -13,12 +13,4 @@ class CompanyRepository extends EloquentBaseRepository implements CompanyReposit
         parent::__construct($model);
     }
 
-    /**
-     * @param int $companyId
-     * @return Collection
-     */
-    public function getEmployees(int $companyId): Collection
-    {
-        return new  Collection();
-    }
 }

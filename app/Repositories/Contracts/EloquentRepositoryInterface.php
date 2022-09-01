@@ -2,6 +2,7 @@
 
 namespace App\Repositories\Contracts;
 
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Query\Builder;
@@ -16,6 +17,14 @@ interface EloquentRepositoryInterface
      *
      */
     public function all(array $columns = ['*'], array $relations = []): Collection;
+
+    /**
+     * Get all models in paginated form.
+     * @param array $columns
+     * @param int $perPage
+     * @return LengthAwarePaginator
+     */
+    public function getPaginated(array $columns = ['*'], int $perPage = 10): LengthAwarePaginator;
 
     /**
      * Find model by id.

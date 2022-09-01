@@ -4,6 +4,7 @@ namespace App\Repositories\Eloquent;
 
 use App\Models\Employee;
 use App\Repositories\Contracts\EmployeeRepositoryInterface;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Collection;
 
 class EmployeeRepository extends EloquentBaseRepository implements  EmployeeRepositoryInterface
@@ -12,13 +13,12 @@ class EmployeeRepository extends EloquentBaseRepository implements  EmployeeRepo
     {
         parent::__construct($model);
     }
-
     /**
-     * @param int $employeeId
-     * @return Collection
+     * @param int $companyId
+     * @return LengthAwarePaginator
      */
-    public function getCompany(int $employeeId): Collection
+    public function getEmployees(int $companyId): LengthAwarePaginator
     {
-        return new Collection();
+        return $this->model::query()->where('company_id', $companyId)->paginate(10);
     }
 }

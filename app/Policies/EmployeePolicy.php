@@ -19,7 +19,11 @@ class EmployeePolicy
      */
     public function viewAny(User $user)
     {
-        //
+
+        return $user->role == RoleType::SUPER_ADMIN
+            || $user->role == RoleType::ADMIN
+            || $user->role == RoleType::COMPANY && ($user->company && $user->company->id == request('company')->id);
+
     }
 
     /**
@@ -31,7 +35,10 @@ class EmployeePolicy
      */
     public function view(User $user, Employee $employee)
     {
-        //
+        return $user->role == RoleType::SUPER_ADMIN
+            || $user->role == RoleType::ADMIN
+            || ($user->employee && $user->employee->company_id == $company->id)
+            || ($user->company && $user->company->id == $company->id);
     }
 
     /**

@@ -5,10 +5,14 @@ namespace App\Http\Controllers;
 use App\Constants\RoleType;
 use App\Http\Requests\StoreEmployeeRequest;
 use App\Http\Requests\UpdateEmployeeRequest;
+use App\Http\Resources\EmployeeResourceCollection;
 use App\Http\Resources\EmptyResource;
+use App\Models\Company;
 use App\Models\Employee;
 use App\Repositories\Contracts\EmployeeRepositoryInterface;
 use App\Repositories\Contracts\UserRepositoryInterface;
+use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 
 class EmployeeController extends Controller
@@ -26,11 +30,15 @@ class EmployeeController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @param Company $company
+     * @return JsonResponse
+     * @throws AuthorizationException
      */
-    public function index()
+    public function index(Company $company): JsonResponse
     {
-//        $this->employeeRepository->get();
+        $this->authorize('viewAny', Employee::class);
+        $employees = $this->employeeRepository->getEmployees($company->id);
+        return $this->respondWithResourceCollection(new EmployeeResourceCollection($employees));
     }
 
 
@@ -39,8 +47,9 @@ class EmployeeController extends Controller
      *
      * @param StoreEmployeeRequest $request
      * @return JsonResponse
+     * @throws AuthorizationException
      */
-    public function store(StoreEmployeeRequest $request)
+    public function store(StoreEmployeeRequest $request): JsonResponse
     {
         $this->authorize('create', Employee::class);
         $user = $this->userRepository->findById($request->user_id);
@@ -53,7 +62,7 @@ class EmployeeController extends Controller
             }
         }
         $employee = $this->employeeRepository->create($request->validated());
-        return  $this->respondWithResource(new EmptyResource($employee), 'Employee created successfully');
+        return $this->respondWithResource(new EmptyResource($employee), 'Employee created successfully');
     }
 
     /**

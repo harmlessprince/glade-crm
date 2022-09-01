@@ -30,5 +30,7 @@ Route::prefix('auth')->group(function () {
 Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('users', UserController::class)->except('index');
     Route::apiResource('companies', CompanyController::class);
-    Route::apiResource('employees', EmployeeController::class);
+    Route::get('employees/{company}', [EmployeeController::class, 'index'])->name('employees.index');
+    Route::apiResource('employees', EmployeeController::class)->except('index');
+
 });

@@ -2,15 +2,16 @@
 
 namespace App\Repositories\Contracts;
 
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Collection;
 
 interface EmployeeRepositoryInterface extends EloquentRepositoryInterface
 {
     /**
-     * Get employee company.
-     * @param int $employeeId
-     * @return Collection
+     * Get company employees.
+     * @param int $companyId
+     * @return LengthAwarePaginator
      *
      */
-    public function getCompany( int $employeeId): Collection;
+    public function getEmployees(int $companyId): LengthAwarePaginator;
 }

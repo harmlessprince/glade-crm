@@ -3,6 +3,7 @@
 namespace App\Repositories\Eloquent;
 
 use App\Repositories\Contracts\EloquentRepositoryInterface;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 
@@ -72,5 +73,15 @@ class EloquentBaseRepository implements EloquentRepositoryInterface
     public function deleteById(int $modelId): bool
     {
         return $this->findById($modelId)->delete();
+    }
+
+    /**
+     * @param array $columns
+     * @param int $perPage
+     * @return LengthAwarePaginator
+     */
+    public function getPaginated(array $columns = ['*'], int $perPage = 10): LengthAwarePaginator
+    {
+        return $this->model::query()->select($columns)->paginate($perPage);
     }
 }

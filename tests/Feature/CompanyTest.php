@@ -30,7 +30,7 @@ class CompanyTest extends TestCase
         Company::factory()->create(['user_id' => $user1->id]);
         Company::factory()->create(['user_id' => $user2->id]);
         $repository = \Mockery::mock(CompanyRepositoryInterface::class);
-        $repository->shouldReceive('all')->once()->andReturn(Company::all());
+        $repository->shouldReceive('getPaginated')->once()->andReturn(Company::paginate(10));
         $this->app->instance(CompanyRepositoryInterface::class, $repository);
         $response = $this->call('GET', route('companies.index'));
         $response->assertOk();
