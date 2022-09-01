@@ -47,7 +47,7 @@ Below is a notion link where I planned development
 These instructions will get you a copy of the project up and running on your local machine for development and testing purposes.
 
   #### Dependencies
-  - [Laravel Requiremnets] 
+  - [Laravel Requirements](https://laravel.com/docs/7.x/installation) 
  
   #### Getting Started
   - Install composer and all laravel dependencies [Laravel Requirements](https://laravel.com/docs/7.x/installation)
@@ -83,7 +83,7 @@ These instructions will get you a copy of the project up and running on your loc
     ```
     php artisan app:setup --seed=y
     ```
-  - Setup Mail with either mailtrap or mailhog
+  - Setup Mail with either Mailtrap or mailhog
   
     ```
     MAIL_MAILER=smtp
