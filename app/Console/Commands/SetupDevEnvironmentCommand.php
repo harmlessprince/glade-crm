@@ -14,7 +14,7 @@ class SetupDevEnvironmentCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'dev:setup';
+    protected $signature = 'app:setup {--seed=n : Specify y if you want company and employee data seeded}';
 
     /**
      * The console command description.
@@ -40,24 +40,31 @@ class SetupDevEnvironmentCommand extends Command
      */
     public function handle()
     {
+//dd($this->option('seed'));
         $this->info('Setting up development environment');
         $this->info('Step 1: refresh database');
         $this->migrateFresh();
         $this->info('Step 2: seed database');
         $this->info('Step 2.1: Create super admin');
         $this->createSuperAdmin();
-        $this->info('Step 2.1: Seed Company and Employee data');
-        $this->SeedDatabase();
+        if ($this->option('seed') === 'y') {
+            $this->info('Step 2.1: Seed Company and Employee data');
+            $this->SeedDatabase();
+        }
         $this->info('All done. Bye!');
+        return 0;
     }
+
     private function SeedDatabase()
     {
         $this->call('db:seed');
     }
+
     private function migrateFresh()
     {
         $this->call('migrate:fresh');
     }
+
     private function createSuperAdmin()
     {
         $this->info('Creating Super Admin');

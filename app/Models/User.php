@@ -44,6 +44,10 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+    /**
+     * @var mixed
+     */
+
 
     public function getRoleName(int $role)
     {
@@ -63,15 +67,15 @@ class User extends Authenticatable
         }
     }
 
-    public function isSuperAdmin()
+    public function isSuperAdmin(): bool
     {
         return $this->role == RoleType::SUPER_ADMIN;
     }
-    public function isAdmin()
+    public function isAdmin(): bool
     {
         return $this->role == RoleType::ADMIN;
     }
-    public function isCompany()
+    public function isCompany(): bool
     {
         return $this->role == RoleType::COMPANY;
 
@@ -81,12 +85,12 @@ class User extends Authenticatable
         return $this->role == RoleType::EMPLOYEE;
     }
 
-    public function company()
+    public function company(): HasOne
     {
         return $this->hasOne(Company::class);
     }
 
-    public function employee()
+    public function employee(): HasOne
     {
         return $this->hasOne(Employee::class);
     }

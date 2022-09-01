@@ -76,6 +76,7 @@ class EmployeeController extends Controller
      */
     public function show(Employee $employee): JsonResponse
     {
+//        dd('kk');
         $this->authorize('view', $employee);
         return $this->respondWithResource(new EmployeeResource($employee->load('company')));
     }
