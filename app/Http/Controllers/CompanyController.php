@@ -50,10 +50,10 @@ class CompanyController extends Controller
 
         $user = $this->userRepository->findById($request->user_id);
         if ($user && $user->company()->exists()){
-            $this->respondError('A company has already been created for the supplied user');
+           return $this->respondError('A company has already been created for the supplied user');
         }
         if ($user && ($user->role  != RoleType::COMPANY)){
-            $this->respondError('Only users with role of company can have a company');
+          return  $this->respondError('Only users with role of company can have a company');
         }
         $company = $this->companyRepository->create($request->validated());
         return $this->respondWithResource(new CompanyResource($company), 'Company created successfully');

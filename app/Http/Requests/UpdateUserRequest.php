@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class UpdateUserRequest extends FormRequest
 {
@@ -25,7 +26,7 @@ class UpdateUserRequest extends FormRequest
     {
         return [
             'name' => ['sometimes', 'string', 'max:200'],
-            'email' => ['sometimes', 'email']
+            'email' => ['sometimes', 'email', Rule::unique('users')->ignore($this->user)]
         ];
     }
 }

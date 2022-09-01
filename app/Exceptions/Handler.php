@@ -78,7 +78,7 @@ class Handler extends ExceptionHandler
             return $this->apiResponse(
                 [
                     'success' => false,
-                    'message' => 'Entry for ' . str_replace('App\\', '', $e->getModel()) . ' not found'
+                     'message' => class_basename($e->getModel()) . ' not found',
                 ],
                 404
             );
